@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+
+  jupyter:
+    build:
+      context: ./jupyter
+    ports:
+      - 8888:8888
+    links:
+      - mysql
+    volumes:
+          - ~/Springboard/sql-project:/notebooks
+
+  mysql:
+    image: mysql:5.5
+    restart: always
+    ports: 
+      - 3306:3306
+    volumes:
+      - type: bind
+        source: ~/Springboard/local-files/sql-project_db/
+        target: /var/lib/mysql
+      - ./data/country_club.sql:/docker-entrypoint-initdb.d/country_club.sql 
+    environment:    
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: country_club
